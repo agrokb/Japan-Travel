@@ -9,7 +9,8 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      
     }
   },
   methods:{
@@ -19,7 +20,7 @@ export default {
        this.$http.post(api,vm.user).then((response) => {
        console.log(response.data)
        if(response.data.success){
-         vm.$router.push('/login');
+         vm.$router.push('/login').catch(error => { console.log(error) });
        }
   })
     

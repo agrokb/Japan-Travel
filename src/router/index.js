@@ -8,14 +8,18 @@ export default new Router({
   mode: 'history',
   routes: [
     {
+      path: '*',
+      redirect: '/login',
+    },
+    {
       path: '/',
       name: 'HelloWorld',
-      component: HelloWorld
+      component: HelloWorld,
     },
     {
       path:'/login',
       name:'Login',
-      component:Login
+      component:Login,
     }
   ]
 })
