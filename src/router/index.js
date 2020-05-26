@@ -5,7 +5,6 @@ import Login from '@/components/pages/Login'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
   routes: [
     {
       path: '*',
@@ -15,12 +14,12 @@ export default new Router({
       path: '/',
       name: 'HelloWorld',
       component: HelloWorld,
+      meta: { requiresAuth: true }
     },
     {
       path:'/login',
       name:'Login',
       component:Login,
-      meta: { requiresAuth: true }
     }
   ]
 })
