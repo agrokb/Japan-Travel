@@ -6,13 +6,9 @@
 
 <script>
 export default {
-  name: 'App',
-  created(){
-    const api= `${process.env.APIPATH}/api/${process.env.CUSTOMAPATH}/products`;
-    this.$http.get(api).then((response) => {
-})
+ 
 
-  }
+  
 }
 </script>
 
