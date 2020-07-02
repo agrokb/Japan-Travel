@@ -18,6 +18,11 @@ export default new Router({
       component:Login,
     },
     {
+      path:'/',
+      name:'Home',
+      component:Products,
+    },
+    {
       path:'/admin',
       name:'DashBoard',
       component:DashBoard,

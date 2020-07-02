@@ -1,28 +1,22 @@
 <template>
-<div>
+<div class="mt-5">
  <form class="form-signin" @submit.prevent="signin">
   <div class="text-center mb-4">
-    <h1 class="h3 mb-3 font-weight-normal">Floating labels</h1>
-    <p>Build form controls with floating labels via the <code>:placeholder-shown</code> pseudo-element. <a href="https://caniuse.com/#feat=css-placeholder-shown">Works in latest Chrome, Safari, and Firefox.</a></p>
+    <h1 class="h3 mb-3 font-weight-normal">ようこそKIC図書館</h1>
+    <h2 class="h3 mb-3 font-weight-normal">ログイン</h2>
   </div>
 
   <div class="form-label-group">
-    <input type="email" id="inputEmail" class="form-control" placeholder="Email address" v-model="user.username" required autofocus>
-    <label for="inputEmail">Email address</label>
+    <input type="email" id="inputEmail" class="form-control" placeholder="Email address" v-model="user.email" required autofocus>
+    <label for="inputEmail">メールアドレス</label>
   </div>
 
   <div class="form-label-group">
     <input type="password" id="inputPassword" class="form-control" placeholder="Password" v-model="user.password" required>
-    <label for="inputPassword">Password</label>
-  </div>
-
-  <div class="checkbox mb-3">
-    <label>
-      <input type="checkbox" value="remember-me"> Remember me
-    </label>
+    <label for="inputPassword">パスワード</label>
   </div>
   <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-  <p class="mt-5 mb-3 text-muted text-center">&copy; 2017-2020</p>
+  <p class="mt-5 mb-3 text-muted text-center">&copy;練習用 2017-2020</p>
 </form>
 </div>
 </template>
@@ -145,27 +139,39 @@ body {
 }
     </style>
 <script>
+import axios from 'axios'
+
 export default {
 
   data () {
     return {
       user:{
-        username:'',
+        email:'',
         password:'',
       }
     }
   },
   methods:{
     signin(){
-       const api= `${process.env.APIPATH}/admin/signin`;
+       const api= `http://127.0.0.1:3000`;
        const vm = this;
-       vm.$http.post(api,vm.user).then((response) => {
-       console.log(response.data)
-       if(response.data.success){
-         vm.$router.push('/admin/products')
-       }
-})
+       axios({
+          method: 'POST',
+          url:'/auth/sign_in',
+          baseURL: 'http://127.0.0.1:3000',
+          data: this.user,
+          headers:{"content-type": "application/json"},    
+        }).then((res) => {
+          console.log(res.header)
+
+          if(res.statusText === "OK"){
+             vm.$router.push("/");
+          }
+        });
+
     }
+     
+    
   }
 }
 </script>
