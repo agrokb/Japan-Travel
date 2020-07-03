@@ -157,7 +157,7 @@ export default {
        const vm = this;
        axios({
           method: 'POST',
-          url:'/auth/sign_in',
+          url:'/admin_auth/sign_in',
           baseURL: 'http://127.0.0.1:3000',
           data: this.user,
           headers:{"content-type": "application/json"},    
