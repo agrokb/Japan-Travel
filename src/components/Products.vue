@@ -1,41 +1,13 @@
 <template>
   <div　class="container">　
     <h1　class="mt-4">書籍一覧</h1>
-    <div class="text-right mt-4">
+    <div class="text-right mt-4 mb-4">
       <button class="btn btn-primary" @click="openModal">追加書籍</button>
     </div>
-    <table class="table mt-4">
-      <thead>
-        <tr>
-          <th width="120">ID</th>
-          <th width="120">ISBN</th>
-          <th width="100">種別</th>
-          <th　width="120">書籍名</th>
-          <th width="100">出版社名</th>
-          <th width="80">出版年月</th>
-          <th width="120">著者名</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item) in books" :key="item.id">
-          <td> {{ item.id }} </td>
-          <td> {{ item.isbn13 }} </td>
-          <td> {{ item.種別 }} </td>
-          <td class="text-centered">
-            {{ item.書籍名}}
-          </td>
-          <td class="text-centered">
-            {{ item.出版社名}}
-          </td>
-           <td class="text-centered">
-            {{ item.出版年月}}
-          </td>
-          <td class="text-centered">
-            {{ item.著者名}}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+     <div class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="検索:ISBN" aria-label="Username" aria-describedby="basic-addon1">
+    </div>
+    
     <!-- Modal -->
     <div class="modal fade" id="bookModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
       aria-hidden="true">
@@ -98,59 +70,70 @@
         </div>
       </div>
     </div>
+    <!-- listTable -->
+    <listTable :books="books" />
   </div>
 
 </template>
 
 <script>
-  import $ from 'jquery';
+import $ from "jquery";
+import listTable from "./listTable"
 
-  export default {
-    data() {
-      return {
-        books: [],
-        lastId:'',
-        tempbook: {},
-        sendBook:[]
-      };
+export default {
+  components:{
+    listTable
+  },
+  data() {
+    return {
+      books: [],
+      lastId: "",
+      tempbook: {},
+      sendBook: [],
+    };
+  },
+  methods: {
+    getbooks() {
+      const api = "http://127.0.0.1:3000/api/v1/books";
+      const vm = this;
+      this.$http.get(api).then(response => {
+        console.log(response);
+        vm.books = response.data;
+        vm.lastId = response.data[response.data.length - 1].id + 1;
+      });
     },
-    methods: {
-      getbooks(){
-        const api = "http://127.0.0.1:3000/api/v1/books";
-        const vm = this;
-        this.$http.get(api).then((response) => {
-          console.log(response);
-          vm.books = response.data
-          vm.lastId = response.data[response.data.length-1].id+1
-        });
-      },
-      openModal(){
-        $('#bookModal').modal('show')
-      },
-      createBook(){
-        const api = "http://127.0.0.1:3000/api/v1/books";
-        const vm = this;
-        vm.sendBook.push(vm.tempbook);
-        this.$http.post(api, {
-          data: vm.tempbook
-        },{
-           headers: {
-            'Content-Type': 'application/json'
-        }
-        }).then((response) => {
+    openModal() {
+      $("#bookModal").modal("show");
+    },
+    createBook() {
+      const api = "http://127.0.0.1:3000/api/v1/books";
+      const vm = this;
+      vm.sendBook.push(vm.tempbook);
+      this.$http
+        .post(
+          api,
+          {
+            data: vm.tempbook,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then(response => {
           console.log(response.data);
-          if (response.data.status == "SUCCESS"){
-            $('#bookModal').modal('toggle')
-            alert("追加成功")
-          }else{
-            alert("追加失敗")
+          if (response.data.status == "SUCCESS") {
+            $("#bookModal").modal("toggle");
+            alert("追加成功");
+          } else {
+            alert("追加失敗");
           }
         });
-      },
     },
-    created(){
-      this.getbooks();
-    }
-  }
-
+  },
+  created() {
+    this.getbooks();
+  },
+};
 </script>
